@@ -23,7 +23,7 @@ on:
           - 'RKSU'
           - 'xxKSU'
           - 'SukiSU'
-        default: 'xxKSU'
+        default: 'RKSU'
       
       enable_susfs:
         description: 'Enable SUSFS (only works with RKSU/SukiSU)'
@@ -193,7 +193,7 @@ jobs:
           start_time=$(date +%s)
 
           export PATH="${GITHUB_WORKSPACE}/clang/bin:${PATH}"
-          export KBUILD_BUILD_USER="elohim-etz"
+          export KBUILD_BUILD_USER="sukuna567"
           export KBUILD_BUILD_HOST="GitHub-Actions"
 
           mkdir -p out
@@ -243,12 +243,12 @@ jobs:
           # Build zip name based on variant and SUSFS status
           if [ "${{ github.event.inputs.enable_ksu }}" == "true" ]; then
             if [ "$SUSFS_ENABLED" == "true" ]; then
-              ZIP_NAME="Miku-RM6785-${KSU_VARIANT}-SUSFS-${TIMESTAMP}"
+              ZIP_NAME="Esports-Edition-RM6785-${KSU_VARIANT}-SUSFS-${TIMESTAMP}"
             else
-              ZIP_NAME="Miku-RM6785-${KSU_VARIANT}-${TIMESTAMP}"
+              ZIP_NAME="Esports-Edition-RM6785-${KSU_VARIANT}-${TIMESTAMP}"
             fi
           else
-            ZIP_NAME="Miku-RM6785-Stock-${TIMESTAMP}"
+            ZIP_NAME="Esports-Edition-RM6785-Stock-${TIMESTAMP}"
           fi
           
           zip -r9 "${ZIP_NAME}.zip" * > /dev/null 2>&1
