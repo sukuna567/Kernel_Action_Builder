@@ -7,13 +7,13 @@ on:
         description: 'Kernel Branch'
         required: true
         type: string
-        default: 'main'
+        default: 'R'
       
       enable_ksu:
         description: 'Enable KernelSU'
         required: true
         type: boolean
-        default: false
+        default: true
       
       ksu_variant:
         description: 'KernelSU Variant (only if KSU enabled)'
@@ -23,7 +23,7 @@ on:
           - 'RKSU'
           - 'xxKSU'
           - 'SukiSU'
-        default: 'RKSU'
+        default: 'xxKSU'
       
       enable_susfs:
         description: 'Enable SUSFS (only works with RKSU/SukiSU)'
