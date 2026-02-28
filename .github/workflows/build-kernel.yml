@@ -23,7 +23,7 @@ on:
           - 'RKSU'
           - 'xxKSU'
           - 'SukiSU'
-        default: 'RKSU'
+        default: 'xxKSU'
       
       enable_susfs:
         description: 'Enable SUSFS (only works with RKSU/SukiSU)'
