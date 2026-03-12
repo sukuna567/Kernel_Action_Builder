@@ -21,9 +21,10 @@ on:
         type: choice
         options:
           - 'RKSU'
+          - 'Tksu'
           - 'xxKSU'
           - 'SukiSU'
-        default: 'xxKSU'
+        default: 'Tksu'
       
       enable_susfs:
         description: 'Enable SUSFS (only works with RKSU/SukiSU)'
@@ -119,6 +120,20 @@ jobs:
             echo "KSU_MANAGER_URL=https://github.com/rsuntk/KernelSU/releases/latest" >> $GITHUB_ENV
           fi
 
+      - name: Setup KernelSU - Tksu
+        if: github.event.inputs.enable_ksu == 'true' && github.event.inputs.ksu_variant == 'Tksu'
+        working-directory: kernel
+        run: |
+          echo "Setting up Tksu..."
+          curl -LSs https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh | bash
+          echo "KSU_VARIANT=Tksu" >> $GITHUB_ENV
+          echo "SUSFS_ENABLED=false" >> $GITHUB_ENV
+          echo "KSU_MANAGER_URL=https://github.com/backslashxx/KernelSU/releases/latest" >> $GITHUB_ENV
+          
+          if [ "${{ github.event.inputs.enable_susfs }}" == "true" ]; then
+            echo "⚠️ Warning: Tksu does not support SUSFS. Ignoring SUSFS flag."
+          fi
+          
       - name: Setup KernelSU - xxKSU
         if: github.event.inputs.enable_ksu == 'true' && github.event.inputs.ksu_variant == 'xxKSU'
         working-directory: kernel
