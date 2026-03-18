@@ -207,8 +207,8 @@ jobs:
           start_time=$(date +%s)
 
           export PATH="${GITHUB_WORKSPACE}/clang/bin:${PATH}"
-          export KBUILD_BUILD_USER="sukuna567"
-          export KBUILD_BUILD_HOST="@KaliLinux"
+          export KBUILD_BUILD_USER="sukuna567-"
+          export KBUILD_BUILD_HOST="KaliLinux"
 
           mkdir -p out
           
