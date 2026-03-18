@@ -48,11 +48,11 @@ jobs:
       USE_CCACHE: 1
       TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
       TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-      KERNEL_REPO: "https://github.com/sukuna567/kernel_realme_wasabi.git"
+      KERNEL_REPO: "https://github.com/sukuna567/android_kernel_realme_mt6785.git"
       CLANG_REPO: "https://gitlab.com/crdroidandroid/android_prebuilts_clang_host_linux-x86_clang-r547379.git"
       ANYKERNEL_REPO: "https://github.com/sukuna567/AK3.git"
-      ANYKERNEL_BRANCH: "main"
-      DEFCONFIG: "wasabi_defconfig"
+      ANYKERNEL_BRANCH: "personal"
+      DEFCONFIG: "RM6785_defconfig"
 
     steps:
       - name: Checkout Workflow Repository
