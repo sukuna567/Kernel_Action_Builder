@@ -213,9 +213,7 @@ jobs:
           mkdir -p out
           
           make O=out ARCH=${ARCH} ${DEFCONFIG}
-
-          make oldconfig
-
+          
           make -j$(nproc --all) O=out \
               ARCH=${ARCH} \
               CC="ccache clang" \
