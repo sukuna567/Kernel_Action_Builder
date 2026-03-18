@@ -7,7 +7,7 @@ on:
         description: 'Kernel Branch'
         required: true
         type: string
-        default: 'R'
+        default: 'personal'
       
       enable_ksu:
         description: 'Enable KernelSU'
@@ -51,7 +51,7 @@ jobs:
       KERNEL_REPO: "https://github.com/sukuna567/android_kernel_realme_mt6785.git"
       CLANG_REPO: "https://gitlab.com/crdroidandroid/android_prebuilts_clang_host_linux-x86_clang-r547379.git"
       ANYKERNEL_REPO: "https://github.com/sukuna567/AK3.git"
-      ANYKERNEL_BRANCH: "personal"
+      ANYKERNEL_BRANCH: "main"
       DEFCONFIG: "RM6785_defconfig"
 
     steps:
