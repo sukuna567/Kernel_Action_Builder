@@ -214,7 +214,7 @@ jobs:
           
           make O=out ARCH=${ARCH} ${DEFCONFIG}
 
-          make menuconfig
+          make oldconfig
 
           make -j$(nproc --all) O=out \
               ARCH=${ARCH} \
