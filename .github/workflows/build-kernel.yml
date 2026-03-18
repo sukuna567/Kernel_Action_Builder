@@ -138,7 +138,7 @@ jobs:
         working-directory: kernel
         run: |
           echo "Setting up xxKSU..."
-          curl -LSs "https://github.com/sukuna567/KernelSU/blob/master/kernel/setup.sh" | bash -s master
+          curl -LSs "https://raw.githubusercontent.com/backslashxx/KernelSU/master/kernel/setup.sh" | bash -s master
           echo "KSU_VARIANT=xxKSU" >> $GITHUB_ENV
           echo "SUSFS_ENABLED=false" >> $GITHUB_ENV
           echo "KSU_MANAGER_URL=https://github.com/backslashxx/KernelSU/releases/latest" >> $GITHUB_ENV
