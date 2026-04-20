@@ -125,7 +125,7 @@ jobs:
         working-directory: kernel
         run: |
           echo "Setting up Tksu..."
-          curl -LSs https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh | bash
+          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
           echo "KSU_VARIANT=Tksu" >> $GITHUB_ENV
           echo "SUSFS_ENABLED=false" >> $GITHUB_ENV
           
