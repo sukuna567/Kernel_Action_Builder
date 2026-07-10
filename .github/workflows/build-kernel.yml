@@ -371,18 +371,18 @@ jobs:
           if [ "${{ github.event.inputs.enable_ksu }}" == "true" ]; then
             if [ "${SUSFS_ENABLED}" == "true" ]; then
               if [ "${SUSFS_DRIVER_MODE}" == "no_ksu_driver" ]; then
-                ZIP_NAME="B-A-N-K-A-A-I-NEMO-${KSU_VARIANT}-SUSFS_NoDriver-${TIMESTAMP}"
+                ZIP_NAME="B-A-N-K-A-A-I-v3.0-RM6785-Kernel-${KSU_VARIANT}-SUSFS_NoDriver-${TIMESTAMP}"
               else
-                ZIP_NAME="B-A-N-K-A-A-I-NEMO-${KSU_VARIANT}-SUSFS-${TIMESTAMP}"
+                ZIP_NAME="B-A-N-K-A-A-I-v3.0-RM6785-Kernel-${KSU_VARIANT}-SUSFS-${TIMESTAMP}"
               fi
             else
-              ZIP_NAME="B-A-N-K-A-A-I-NEMO-${KSU_VARIANT}-${TIMESTAMP}"
+              ZIP_NAME="B-A-N-K-A-A-I-v3.0-RM6785-Kernel-${KSU_VARIANT}-${TIMESTAMP}"
             fi
           elif [ "${{ github.event.inputs.enable_susfs }}" == "true" ]; then
             # Standalone SUSFS without any KSU driver
-            ZIP_NAME="B-A-N-K-A-A-I-NEMO-SUSFS_Standalone-${TIMESTAMP}"
+            ZIP_NAME="B-A-N-K-A-A-I-v3.0-RM6785-Kernel-SUSFS_Standalone-${TIMESTAMP}"
           else
-            ZIP_NAME="B-A-N-K-A-A-I-NEMO-Stock-${TIMESTAMP}"
+            ZIP_NAME="B-A-N-K-A-A-I-v3.0-RM6785-Kernel-Stock-${TIMESTAMP}"
           fi
 
           zip -r9 "${ZIP_NAME}.zip" . -x '*.git*' > /dev/null 2>&1
