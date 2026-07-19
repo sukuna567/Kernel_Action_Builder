@@ -262,7 +262,7 @@ jobs:
         working-directory: kernel
         run: |
           if [ "${{ github.event.inputs.enable_susfs }}" == "true" ]; then
-            curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s main
+            curl -ls https://raw.githubusercontent.com/ReSukiSU/ReSukiSU/main/kernel/setup.sh | bash -
             echo "SUSFS_ENABLED=true"               >> $GITHUB_ENV
             echo "KSU_BRANCH=main"            >> $GITHUB_ENV
           else
