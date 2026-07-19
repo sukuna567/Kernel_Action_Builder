@@ -64,58 +64,58 @@
           ANYKERNEL_BRANCH: "main"                                                                                                                                                                                         
           DEFCONFIG: "nemo_defconfig"                                                                                                                                                                                      
                                                                                                                                                                                                                            
-        steps:                                                                                                                                                                                                             
-          # ── 0. Notify Telegram: Build Started ────────────────────────────────────                                                                                                                                      
-          - name: Notify Telegram — Build Started                                                                                                                                                                          
-            run: |                                                                                                                                                                                                         
-              VARIANT="${{ github.event.inputs.ksu_variant }}"                                                                                                                                                             
-              if [ "${{ github.event.inputs.enable_ksu }}" != "true" ]; then                                                                                                                                               
-                VARIANT="Stock"                                                                                                                                                                                            
-              fi                                                                                                                                                                                                           
-                                                                                                                                                                                                                           
-              SUSFS_TAG=""                                                                                                                                                                                                 
-              if [ "${{ github.event.inputs.enable_susfs }}" == "true" ]; then                                                                                                                                             
-                if [ "${{ github.event.inputs.enable_ksu }}" == "true" ]; then                                                                                                                                             
-                  if [ "${{ github.event.inputs.susfs_mode }}" == "without_ksu" ]; then                                                                                                                                    
-                    SUSFS_TAG=" + SUSFS (No KSU driver)"                                                                                                                                                                   
-                  else                                                                                                                                                                                                     
-                    SUSFS_TAG=" + SUSFS"                                                                                                                                                                                   
-                  fi                                                                                                                                                                                                       
-                else                                                                                                                                                                                                       
-                  SUSFS_TAG=" + SUSFS (Standalone)"                                                                                                                                                                        
-                fi                                                                                                                                                                                                         
-              fi                                                                                                                                                                                                           
-                                                                                                                                                                                                                           
-              NOTE="${{ github.event.inputs.custom_note }}"                                                                                                                                                                
-              RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"                                                                                                                
-                                                                                                                                                                                                                           
-              # Escape special MarkdownV2 chars in variable fields                                                                                                                                                         
-              esc() { printf '%s' "$1" | sed 's/[_*[\]()~`>#+=|{}.!-]/\\&/g'; }                                                                                                                                            
-              VARIANT_ESC=$(esc "${VARIANT}${SUSFS_TAG}")                                                                                                                                                                  
-              BRANCH_ESC=$(esc "${{ github.event.inputs.kernel_branch }}")                                                                                                                                                 
-                                                                                                                                                                                                                           
-              MSG_FILE=$(mktemp)                                                                                                                                                                                           
-              printf "🔨 *Build Started — salaa*\n"              >> "$MSG_FILE"                                                                                                                                            
-              printf "━━━━━━━━━━━━━━━━━━━━\n"                     >> "$MSG_FILE"                                                                                                                                           
-              printf "📱 *Device*   \`Realme 7/Narzo 20 Pro/Narzo 30 4G (salaa)\`\n"      >> "$MSG_FILE"                                                                                                                   
-              printf "🔧 *Variant*  \`%s\`\n" "${VARIANT_ESC}"    >> "$MSG_FILE"                                                                                                                                           
-              printf "🌿 *Branch*   \`%s\`\n" "${BRANCH_ESC}"     >> "$MSG_FILE"                                                                                                                                           
-                                                                                                                                                                                                                           
-              if [ -n "$NOTE" ]; then                                                                                                                                                                                      
-                NOTE_ESC=$(esc "$NOTE")                                                                                                                                                                                    
-                printf "📝 *Note*    %s\n" "${NOTE_ESC}"          >> "$MSG_FILE"                                                                                                                                           
-              fi                                                                                                                                                                                                           
-                                                                                                                                                                                                                           
-              printf "━━━━━━━━━━━━━━━━━━━━\n"                     >> "$MSG_FILE"                                                                                                                                           
-              printf "[🔗 View Run](%s)\n" "${RUN_URL}"            >> "$MSG_FILE"                                                                                                                                          
-                                                                                                                                                                                                                           
-              curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \                                                                                                                            
-                -d chat_id="${TELEGRAM_CHAT_ID}" \                                                                                                                                                                         
-                -d parse_mode="MarkdownV2" \                                                                                                                                                                               
-                -d disable_web_page_preview=true \                                                                                                                                                                         
-                --data-urlencode "text@${MSG_FILE}"                                                                                                                                                                        
-                                                                                                                                                                                                                           
-              rm -f "$MSG_FILE"                                                                                                                                                                                            
+        steps:
+      # ── 0. Notify Telegram: Build Started ────────────────────────────────────
+      - name: Notify Telegram — Build Started
+        run: |
+          VARIANT="${{ github.event.inputs.ksu_variant }}"
+          if [ "${{ github.event.inputs.enable_ksu }}" != "true" ]; then
+            VARIANT="Stock"
+          fi
+
+          SUSFS_TAG=""
+          if [ "${{ github.event.inputs.enable_susfs }}" == "true" ]; then
+            if [ "${{ github.event.inputs.enable_ksu }}" == "true" ]; then
+              if [ "${{ github.event.inputs.susfs_mode }}" == "without_ksu" ]; then
+                SUSFS_TAG=" \\+ SUSFS \\(No KSU driver\\)"
+              else
+                SUSFS_TAG=" \\+ SUSFS"
+              fi
+            else
+              SUSFS_TAG=" \\+ SUSFS \\(Standalone\\)"
+            fi
+          fi
+
+          NOTE="${{ github.event.inputs.custom_note }}"
+          RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+          # Escape special MarkdownV2 chars in variable fields
+          esc() { printf '%s' "$1" | sed 's/[_*[\]()~`>#+=|{}.!-]/\\&/g'; }
+          VARIANT_ESC=$(esc "${VARIANT}${SUSFS_TAG}")
+          BRANCH_ESC=$(esc "${{ github.event.inputs.kernel_branch }}")
+
+          MSG_FILE=$(mktemp)
+          printf "🔨 *Build Started — salaa*\n"              >> "$MSG_FILE"
+          printf "━━━━━━━━━━━━━━━━━━━━\n"                     >> "$MSG_FILE"
+          printf "📱 *Device*   \`Realme 7/Narzo 20 Pro/Narzo 30 4G \(salaa\)\`\n"      >> "$MSG_FILE"
+          printf "🔧 *Variant*  \`%s\`\n" "${VARIANT_ESC}"    >> "$MSG_FILE"
+          printf "🌿 *Branch*   \`%s\`\n" "${BRANCH_ESC}"     >> "$MSG_FILE"
+
+          if [ -n "$NOTE" ]; then
+            NOTE_ESC=$(esc "$NOTE")
+            printf "📝 *Note*    %s\n" "${NOTE_ESC}"          >> "$MSG_FILE"
+          fi
+
+          printf "━━━━━━━━━━━━━━━━━━━━\n"                     >> "$MSG_FILE"
+          printf "[🔗 View Run](%s)\n" "${RUN_URL}"            >> "$MSG_FILE"
+
+          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+            -d chat_id="${TELEGRAM_CHAT_ID}" \
+            -d parse_mode="MarkdownV2" \
+            -d disable_web_page_preview=true \
+            --data-urlencode "text@${MSG_FILE}"
+
+          rm -f "$MSG_FILE"                                                                                                                                                                                            
                                                                                                                                                                                                                            
           # ── 1. Checkout ──────────────────────────────────────────────────────────                                                                                                                                      
           - name: Checkout Workflow Repository                                                                                                                                                                             
