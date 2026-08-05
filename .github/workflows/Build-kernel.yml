@@ -1,70 +1,70 @@
-    name: Build RUI2 (RM6785) Kernel                                                                                                                                                                                        
-                                                                                                                                                                                                                           
-    on:                                                                                                                                                                                                                    
-      workflow_dispatch:                                                                                                                                                                                                   
-        inputs:                                                                                                                                                                                                            
-          kernel_branch:                                                                                                                                                                                                   
-            description: 'Kernel Branch'                                                                                                                                                                                   
-            required: true                                                                                                                                                                                                 
-            type: string                                                                                                                                                                                                   
-            default: 'bka-ksu'                                                                                                                                                                                             
-                                                                                                                                                                                                                           
-          enable_ksu:                                                                                                                                                                                                      
-            description: 'Enable KernelSU'                                                                                                                                                                                 
-            required: true                                                                                                                                                                                                 
-            type: boolean                                                                                                                                                                                                  
-            default: false                                                                                                                                                                                                 
-                                                                                                                                                                                                                           
-          ksu_variant:                                                                                                                                                                                                     
-            description: 'KernelSU Variant (only if KSU enabled)'                                                                                                                                                          
-            required: false                                                                                                                                                                                                
-            type: choice                                                                                                                                                                                                   
-            options:                                                                                                                                                                                                       
-              - 'KernelSU-Next'                                                                                                                                                                                            
-              - 'RKSU'                                                                                                                                                                                                     
-              - 'xxKSU'                                                                                                                                                                                                    
-              - 'SukiSU'                                                                                                                                                                                                   
-              - 'ReSukiSU'                                                                                                                                                                                                 
-            default: 'KernelSU-Next'                                                                                                                                                                                       
-                                                                                                                                                                                                                           
-          enable_susfs:                                                                                                                                                                                                    
-            description: 'Enable SUSFS (KernelSU-Next / RKSU / SukiSU / ReSukiSU only)'                                                                                                                                    
-            required: false                                                                                                                                                                                                
-            type: boolean                                                                                                                                                                                                  
-            default: false                                                                                                                                                                                                 
-                                                                                                                                                                                                                           
-          susfs_mode:                                                                                                                                                                                                      
-            description: 'SUSFS Mode — with KSU driver (KSU+SUSFS) or standalone (SUSFS only, no KSU)'                                                                                                                     
-            required: false                                                                                                                                                                                                
-            type: choice                                                                                                                                                                                                   
-            options:                                                                                                                                                                                                       
-              - 'with_ksu'                                                                                                                                                                                                 
-              - 'without_ksu'                                                                                                                                                                                              
-            default: 'with_ksu'                                                                                                                                                                                            
-                                                                                                                                                                                                                           
-          custom_note:                                                                                                                                                                                                     
-            description: 'Custom build note (optional)'                                                                                                                                                                    
-            required: false                                                                                                                                                                                                
-            default: ''                                                                                                                                                                                                    
-                                                                                                                                                                                                                           
-    jobs:                                                                                                                                                                                                                  
-      build:                                                                                                                                                                                                               
-        runs-on: ubuntu-latest                                                                                                                                                                                             
-                                                                                                                                                                                                                           
-        env:                                                                                                                                                                                                               
-          ARCH: arm64                                                                                                                                                                                                      
-          SUBARCH: arm64                                                                                                                                                                                                   
-          LC_ALL: C                                                                                                                                                                                                        
-          USE_CCACHE: 1                                                                                                                                                                                                    
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}                                                                                                                                                            
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}                                                                                                                                                                
-          KERNEL_REPO: "https://github.com/sukuna567/android_kernel_realme_nemo.git"                                                                                                                                       
-          CLANG_REPO: "https://gitlab.com/crdroidandroid/android_prebuilts_clang_host_linux-x86_clang-r547379.git"                                                                                                         
-          ANYKERNEL_REPO: "https://github.com/sukuna567/AK3.git"                                                                                                                                                           
-          ANYKERNEL_BRANCH: "main"                                                                                                                                                                                         
-          DEFCONFIG: "nemo_defconfig"                                                                                                                                                                                      
-                                                                                                                                                                                                                           
-        steps:
+name: Build RUI2 (Nemo) Kernel
+
+on:
+  workflow_dispatch:
+    inputs:
+      kernel_branch:
+        description: 'Kernel Branch'
+        required: true
+        type: string
+        default: 'bka-ksu'
+
+      enable_ksu:
+        description: 'Enable KernelSU'
+        required: true
+        type: boolean
+        default: false
+
+      ksu_variant:
+        description: 'KernelSU Variant (only if KSU enabled)'
+        required: false
+        type: choice
+        options:
+          - 'KernelSU-Next'
+          - 'RKSU'
+          - 'xxKSU'
+          - 'SukiSU'
+          - 'ReSukiSU'
+        default: 'KernelSU-Next'
+
+      enable_susfs:
+        description: 'Enable SUSFS (KernelSU-Next / RKSU / SukiSU / ReSukiSU only)'
+        required: false
+        type: boolean
+        default: false
+
+      susfs_mode:
+        description: 'SUSFS Mode — with KSU driver (KSU+SUSFS) or standalone (SUSFS only, no KSU)'
+        required: false
+        type: choice
+        options:
+          - 'with_ksu'
+          - 'without_ksu'
+        default: 'with_ksu'
+
+      custom_note:
+        description: 'Custom build note (optional)'
+        required: false
+        default: ''
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      ARCH: arm64
+      SUBARCH: arm64
+      LC_ALL: C
+      USE_CCACHE: 1
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      KERNEL_REPO: "https://github.com/EvilAnsh/android_kernel_realme_salaa.git"
+      CLANG_REPO: "https://gitlab.com/crdroidandroid/android_prebuilts_clang_host_linux-x86_clang-r547379.git"
+      ANYKERNEL_REPO: "https://github.com/kardebayan/AnyKernel3.git"
+      ANYKERNEL_BRANCH: "master"
+      DEFCONFIG: "salaa_defconfig"
+
+    steps:
       # ── 0. Notify Telegram: Build Started ────────────────────────────────────
       - name: Notify Telegram — Build Started
         run: |
@@ -115,407 +115,429 @@
             -d disable_web_page_preview=true \
             --data-urlencode "text@${MSG_FILE}"
 
-          rm -f "$MSG_FILE"                                                                                                                                                                                            
-                                                                                                                                                                                                                           
-          # ── 1. Checkout ──────────────────────────────────────────────────────────                                                                                                                                      
-          - name: Checkout Workflow Repository                                                                                                                                                                             
-            uses: actions/checkout@v4                                                                                                                                                                                      
-            with:                                                                                                                                                                                                          
-              fetch-depth: 0                                                                                                                                                                                               
-              submodules: recursive                                                                                                                                                                                        
-                                                                                                                                                                                                                           
-          # ── 2. Cache apt packages ─────────────────────────────────────────────────                                                                                                                                     
-          - name: Cache apt packages                                                                                                                                                                                       
-            uses: actions/cache@v4                                                                                                                                                                                         
-            id: cache-apt                                                                                                                                                                                                  
-            with:                                                                                                                                                                                                          
-              path: |                                                                                                                                                                                                      
-                /var/cache/apt/archives                                                                                                                                                                                    
-                /var/lib/apt/lists                                                                                                                                                                                         
-              key: apt-salaa-${{ runner.os }}-${{ hashFiles('.github/workflows/build-kernel.yml') }}                                                                                                                       
-              restore-keys: |                                                                                                                                                                                              
-                apt-salaa-${{ runner.os }}-                                                                                                                                                                                
-                                                                                                                                                                                                                           
-          - name: Set up Build Environment                                                                                                                                                                                 
-            run: |                                                                                                                                                                                                         
-              sudo apt-get update -qq                                                                                                                                                                                      
-              sudo apt-get install -y --no-install-recommends \                                                                                                                                                            
-                build-essential bc bison flex libssl-dev \                                                                                                                                                                 
-                gcc clang lld libncurses5-dev git zip unzip \                                                                                                                                                              
-                curl wget time ccache libelf-dev libfdt-dev \                                                                                                                                                              
-                python3 python3-pip                                                                                                                                                                                        
-                                                                                                                                                                                                                           
-          # ── 3. ccache ──────────────────────────────────────────────────────────────                                                                                                                                    
-          - name: Cache ccache                                                                                                                                                                                             
-            uses: actions/cache@v4                                                                                                                                                                                         
-            with:                                                                                                                                                                                                          
-              path: ~/.ccache                                                                                                                                                                                              
-              key: ccache-salaa-${{ github.sha }}                                                                                                                                                                          
-              restore-keys: |                                                                                                                                                                                              
-                ccache-salaa-                                                                                                                                                                                              
-                                                                                                                                                                                                                           
-          - name: Configure ccache                                                                                                                                                                                         
-            run: |                                                                                                                                                                                                         
-              ccache --max-size=5G                                                                                                                                                                                         
-              ccache --set-config=compression=true                                                                                                                                                                         
-              ccache --set-config=compression_level=1                                                                                                                                                                      
-              echo "CCACHE_DIR=$HOME/.ccache" >> $GITHUB_ENV                                                                                                                                                               
-                                                                                                                                                                                                                           
-          # ── 4. Kernel source ───────────────────────────────────────────────────────                                                                                                                                    
-          - name: Clone Kernel Source                                                                                                                                                                                      
-            run: |                                                                                                                                                                                                         
-              git clone --depth=1 "$KERNEL_REPO" -b "${{ github.event.inputs.kernel_branch }}" kernel                                                                                                                      
-              cd kernel                                                                                                                                                                                                    
-              echo "KERNEL_DIR=$(pwd)"         >> $GITHUB_ENV                                                                                                                                                              
-              echo "KERNEL_VERSION=$(make kernelversion 2>/dev/null || echo 'unknown')" >> $GITHUB_ENV                                                                                                                     
-              echo "KERNEL_BRANCH=${{ github.event.inputs.kernel_branch }}" >> $GITHUB_ENV                                                                                                                                 
-              echo "KERNEL_COMMIT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV                                                                                                                                            
-                                                                                                                                                                                                                           
-          # ── 5. Clang toolchain ─────────────────────────────────────────────────────                                                                                                                                    
-          - name: Cache Clang Toolchain                                                                                                                                                                                    
-            uses: actions/cache@v4                                                                                                                                                                                         
-            id: cache-clang                                                                                                                                                                                                
-            with:                                                                                                                                                                                                          
-              path: clang                                                                                                                                                                                                  
-              key: clang-r547379                                                                                                                                                                                           
-                                                                                                                                                                                                                           
-          - name: Clone Clang Toolchain                                                                                                                                                                                    
-            if: steps.cache-clang.outputs.cache-hit != 'true'                                                                                                                                                              
-            run: |                                                                                                                                                                                                         
-              git clone --depth=1 "$CLANG_REPO" clang                                                                                                                                                                      
-                                                                                                                                                                                                                           
-          # ── 6. AnyKernel3 ──────────────────────────────────────────────────────────                                                                                                                                    
-          - name: Cache AnyKernel3                                                                                                                                                                                         
-            uses: actions/cache@v4                                                                                                                                                                                         
-            id: cache-anykernel                                                                                                                                                                                            
-            with:                                                                                                                                                                                                          
-              path: AnyKernel                                                                                                                                                                                              
-              key: anykernel-${{ env.ANYKERNEL_BRANCH }}                                                                                                                                                                   
-              restore-keys: |                                                                                                                                                                                              
-                anykernel-                                                                                                                                                                                                 
-                                                                                                                                                                                                                           
-          - name: Clone AnyKernel3                                                                                                                                                                                         
-            if: steps.cache-anykernel.outputs.cache-hit != 'true'                                                                                                                                                          
-            run: |                                                                                                                                                                                                         
-              git clone --depth=1 "$ANYKERNEL_REPO" -b "$ANYKERNEL_BRANCH" AnyKernel                                                                                                                                       
-                                                                                                                                                                                                                           
-          # ── 7. KernelSU variants ───────────────────────────────────────────────────                                                                                                                                    
-                                                                                                                                                                                                                           
-          # --- KernelSU-Next ---                                                                                                                                                                                          
-          - name: Setup KernelSU — KernelSU-Next                                                                                                                                                                           
-            if: github.event.inputs.enable_ksu == 'true' && github.event.inputs.ksu_variant == 'KernelSU-Next'                                                                                                             
-            working-directory: kernel                                                                                                                                                                                      
-            run: |                                                                                                                                                                                                         
-              if [ "${{ github.event.inputs.enable_susfs }}" == "true" ]; then                                                                                                                                             
-                curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s legacy-susfs                                                                                      
-                echo "SUSFS_ENABLED=true"               >> $GITHUB_ENV                                                                                                                                                     
-                echo "KSU_BRANCH=legacy-susfs"     >> $GITHUB_ENV                                                                                                                                                          
-              else                                                                                                                                                                                                         
-                curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s legacy                                                                                            
-                echo "SUSFS_ENABLED=false"              >> $GITHUB_ENV                                                                                                                                                     
-                echo "KSU_BRANCH=legacy"                  >> $GITHUB_ENV                                                                                                                                                   
-              fi                                                                                                                                                                                                           
-              echo "KSU_VARIANT=KernelSU-Next"                                     >> $GITHUB_ENV                                                                                                                          
-              echo "KSU_REPO=https://github.com/KernelSU-Next/KernelSU-Next"          >> $GITHUB_ENV                                                                                                                       
-                                                                                                                                                                                                                           
-          # --- RKSU ---                                                                                                                                                                                                   
-          - name: Setup KernelSU — RKSU                                                                                                                                                                                    
-            if: github.event.inputs.enable_ksu == 'true' && github.event.inputs.ksu_variant == 'RKSU'                                                                                                                      
-            working-directory: kernel                                                                                                                                                                                      
-            run: |                                                                                                                                                                                                         
-              if [ "${{ github.event.inputs.enable_susfs }}" == "true" ]; then                                                                                                                                             
-                curl -LSs "https://raw.githubusercontent.com/rsuntk/KernelSU/main/kernel/setup.sh" | bash -s susfs-rksu-master                                                                                             
-                echo "SUSFS_ENABLED=true"               >> $GITHUB_ENV                                                                                                                                                     
-                echo "KSU_BRANCH=susfs-rksu-master"     >> $GITHUB_ENV                                                                                                                                                     
-              else                                                                                                                                                                                                         
-                curl -LSs "https://raw.githubusercontent.com/rsuntk/KernelSU/main/kernel/setup.sh" | bash -s main                                                                                                          
-                echo "SUSFS_ENABLED=false"              >> $GITHUB_ENV                                                                                                                                                     
-                echo "KSU_BRANCH=main"                  >> $GITHUB_ENV                                                                                                                                                     
-              fi                                                                                                                                                                                                           
-              echo "KSU_VARIANT=RKSU"                                     >> $GITHUB_ENV                                                                                                                                   
-              echo "KSU_REPO=https://github.com/rsuntk/KernelSU"          >> $GITHUB_ENV                                                                                                                                   
-                                                                                                                                                                                                                           
-          # --- xxKSU ---                                                                                                                                                                                                  
-          - name: Setup KernelSU — xxKSU                                                                                                                                                                                   
-            if: github.event.inputs.enable_ksu == 'true' && github.event.inputs.ksu_variant == 'xxKSU'                                                                                                                     
-            working-directory: kernel                                                                                                                                                                                      
-            run: |                                                                                                                                                                                                         
-              curl -LSs "https://raw.githubusercontent.com/backslashxx/KernelSU/master/kernel/setup.sh" | bash -s master                                                                                                   
-              echo "KSU_VARIANT=xxKSU"                                            >> $GITHUB_ENV                                                                                                                           
-              echo "SUSFS_ENABLED=false"                                           >> $GITHUB_ENV                                                                                                                          
-              echo "KSU_BRANCH=master"                                             >> $GITHUB_ENV                                                                                                                          
-              echo "KSU_REPO=https://github.com/backslashxx/KernelSU"             >> $GITHUB_ENV                                                                                                                           
-              if [ "${{ github.event.inputs.enable_susfs }}" == "true" ]; then                                                                                                                                             
-                echo "::warning::xxKSU does not support SUSFS — flag ignored."                                                                                                                                             
-              fi                                                                                                                                                                                                           
-                                                                                                                                                                                                                           
-          # --- SukiSU ---                                                                                                                                                                                                 
-          - name: Setup KernelSU — SukiSU                                                                                                                                                                                  
-            if: github.event.inputs.enable_ksu == 'true' && github.event.inputs.ksu_variant == 'SukiSU'                                                                                                                    
-            working-directory: kernel                                                                                                                                                                                      
-            run: |                                                                                                                                                                                                         
-              if [ "${{ github.event.inputs.enable_susfs }}" == "true" ]; then                                                                                                                                             
-                curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s main                                                                                                
-                echo "SUSFS_ENABLED=true"               >> $GITHUB_ENV                                                                                                                                                     
-                echo "KSU_BRANCH=main"            >> $GITHUB_ENV                                                                                                                                                           
-              else                                                                                                                                                                                                         
-                curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s builtin                                                                                             
-                echo "SUSFS_ENABLED=false"              >> $GITHUB_ENV                                                                                                                                                     
-                echo "KSU_BRANCH=builtin"               >> $GITHUB_ENV                                                                                                                                                     
-              fi                                                                                                                                                                                                           
-              echo "KSU_VARIANT=SukiSU"                                         >> $GITHUB_ENV                                                                                                                             
-              echo "KSU_REPO=https://github.com/SukiSU-Ultra/SukiSU-Ultra"     >> $GITHUB_ENV                                                                                                                              
-                                                                                                                                                                                                                           
-          # --- ReSukiSU ---                                                                                                                                                                                               
-          - name: Setup KernelSU — ReSukiSU                                                                                                                                                                                
-            if: github.event.inputs.enable_ksu == 'true' && github.event.inputs.ksu_variant == 'ReSukiSU'                                                                                                                  
-            working-directory: kernel                                                                                                                                                                                      
-            run: |                                                                                                                                                                                                         
-              curl -LSs "https://raw.githubusercontent.com/ReSukiSU/ReSukiSU/main/kernel/setup.sh" | bash -s main                                                                                                          
-              echo "KSU_VARIANT=ReSukiSU"                                    >> $GITHUB_ENV                                                                                                                                
-              echo "KSU_BRANCH=main"                                         >> $GITHUB_ENV                                                                                                                                
-              echo "KSU_REPO=https://github.com/ReSukiSU/ReSukiSU"          >> $GITHUB_ENV                                                                                                                                 
-              if [ "${{ github.event.inputs.enable_susfs }}" == "true" ]; then                                                                                                                                             
-                echo "SUSFS_ENABLED=true"               >> $GITHUB_ENV                                                                                                                                                     
-              else                                                                                                                                                                                                         
-                echo "SUSFS_ENABLED=false"              >> $GITHUB_ENV                                                                                                                                                     
-              fi                                                                                                                                                                                                           
-                                                                                                                                                                                                                           
-          # ── 8. SUSFS driver mode ───────────────────────────────────────────────────                                                                                                                                    
-          - name: Configure SUSFS Driver Mode                                                                                                                                                                              
-            if: github.event.inputs.enable_susfs == 'true'                                                                                                                                                                 
-            run: |                                                                                                                                                                                                         
-              if [ "${{ github.event.inputs.susfs_mode }}" == "without_ksu" ]; then                                                                                                                                        
-                echo "SUSFS_DRIVER_MODE=no_ksu_driver"   >> $GITHUB_ENV                                                                                                                                                    
-              else                                                                                                                                                                                                         
-                echo "SUSFS_DRIVER_MODE=with_ksu_driver" >> $GITHUB_ENV                                                                                                                                                    
-              fi                                                                                                                                                                                                           
-                                                                                                                                                                                                                           
-          # ── 9. Stock fallback ──────────────────────────────────────────────────────                                                                                                                                    
-          - name: Set Build Variant — Stock                                                                                                                                                                                
-            if: github.event.inputs.enable_ksu == 'false'                                                                                                                                                                  
-            run: |                                                                                                                                                                                                         
-              echo "KSU_VARIANT=Stock"      >> $GITHUB_ENV                                                                                                                                                                 
-              echo "SUSFS_ENABLED=false"    >> $GITHUB_ENV                                                                                                                                                                 
-              echo "SUSFS_DRIVER_MODE=none" >> $GITHUB_ENV                                                                                                                                                                 
-                                                                                                                                                                                                                           
-          # ── 10. Fetch KSU commit info ──────────────────────────────────────────────                                                                                                                                    
-          - name: Get KSU Commit Info                                                                                                                                                                                      
-            if: github.event.inputs.enable_ksu == 'true'                                                                                                                                                                   
-            run: |                                                                                                                                                                                                         
-              KSU_COMMIT=$(git ls-remote "${KSU_REPO}.git" "${KSU_BRANCH}" | cut -f1 | cut -c1-7)                                                                                                                          
-              echo "KSU_COMMIT=${KSU_COMMIT}"                        >> $GITHUB_ENV                                                                                                                                        
-              echo "KSU_COMMIT_URL=${KSU_REPO}/commit/${KSU_COMMIT}" >> $GITHUB_ENV                                                                                                                                        
-                                                                                                                                                                                                                           
-          # ── 11. Build ──────────────────────────────────────────────────────────────                                                                                                                                    
-          - name: Build Kernel                                                                                                                                                                                             
-            id: build_kernel                                                                                                                                                                                               
-            working-directory: kernel                                                                                                                                                                                      
-            run: |                                                                                                                                                                                                         
-              set -e                                                                                                                                                                                                       
-              start_time=$(date +%s)                                                                                                                                                                                       
-                                                                                                                                                                                                                           
-              export PATH="${GITHUB_WORKSPACE}/clang/bin:${PATH}"                                                                                                                                                          
-              export KBUILD_BUILD_USER="Sukuna567"                                                                                                                                                                         
-              export KBUILD_BUILD_HOST="KaliLinux"                                                                                                                                                                         
-                                                                                                                                                                                                                           
-              mkdir -p out                                                                                                                                                                                                 
-              make O=out ARCH=${ARCH} ${DEFCONFIG}                                                                                                                                                                         
-              make -j$(nproc --all) O=out \                                                                                                                                                                                
-                  ARCH=${ARCH} \                                                                                                                                                                                           
-                  CC="ccache clang" \                                                                                                                                                                                      
-                  LLVM=1 \                                                                                                                                                                                                 
-                  LLVM_IAS=1 \                                                                                                                                                                                             
-                  CROSS_COMPILE=aarch64-linux-gnu- \                                                                                                                                                                       
-                  CROSS_COMPILE_ARM32=arm-linux-gnueabi- \                                                                                                                                                                 
-                  CONFIG_NO_ERROR_ON_MISMATCH=y 2>&1 | tee build.log                                                                                                                                                       
-                                                                                                                                                                                                                           
-              BUILD_DURATION=$(( $(date +%s) - start_time ))                                                                                                                                                               
-              echo "BUILD_DURATION=${BUILD_DURATION}" >> $GITHUB_ENV                                                                                                                                                       
-              ccache --show-stats                                                                                                                                                                                          
-                                                                                                                                                                                                                           
-          # ── 12. Verify output ──────────────────────────────────────────────────────                                                                                                                                    
-          - name: Check Build Output                                                                                                                                                                                       
-            working-directory: kernel                                                                                                                                                                                      
-            run: |                                                                                                                                                                                                         
-              if [ ! -f "out/arch/arm64/boot/Image.gz" ]; then                                                                                                                                                             
-                echo "Image.gz not found — build failed."                                                                                                                                                                  
-                exit 1                                                                                                                                                                                                     
-              fi                                                                                                                                                                                                           
-              IMAGE_SIZE_MB=$(echo "scale=2; $(stat -c%s out/arch/arm64/boot/Image.gz) / 1048576" | bc)                                                                                                                    
-              echo "IMAGE_SIZE_MB=${IMAGE_SIZE_MB}" >> $GITHUB_ENV                                                                                                                                                         
-                                                                                                                                                                                                                           
-          # ── 13. Package with AnyKernel3 ───────────────────────────────────────────                                                                                                                                     
-          - name: Package with AnyKernel3                                                                                                                                                                                  
-            run: |                                                                                                                                                                                                         
-              rm -f AnyKernel/Image.gz                                                                                                                                                                                     
-              rm -f AnyKernel/*.zip                                                                                                                                                                                        
-                                                                                                                                                                                                                           
-              cp kernel/out/arch/arm64/boot/Image.gz AnyKernel/                                                                                                                                                            
-                                                                                                                                                                                                                           
-              cd AnyKernel                                                                                                                                                                                                 
-              TIMESTAMP=$(date +"%Y%m%d-%H%M")                                                                                                                                                                             
-                                                                                                                                                                                                                           
-              if [ "${{ github.event.inputs.enable_ksu }}" == "true" ]; then                                                                                                                                               
-                if [ "${SUSFS_ENABLED}" == "true" ]; then                                                                                                                                                                  
-                  if [ "${SUSFS_DRIVER_MODE}" == "no_ksu_driver" ]; then                                                                                                                                                   
-                    ZIP_NAME="B-A-N-K-A-A-I-v3.0-RM6785-Kernel-${KSU_VARIANT}-SUSFS_NoDriver-${TIMESTAMP}"                                                                                                                 
-                  else                                                                                                                                                                                                     
-                    ZIP_NAME="B-A-N-K-A-A-I-v3.0-RM6785-Kernel-${KSU_VARIANT}-SUSFS-${TIMESTAMP}"                                                                                                                          
-                  fi                                                                                                                                                                                                       
-                else                                                                                                                                                                                                       
-                  ZIP_NAME="B-A-N-K-A-A-I-v3.0-RM6785-Kernel-${KSU_VARIANT}-${TIMESTAMP}"                                                                                                                                  
-                fi                                                                                                                                                                                                         
-              elif [ "${{ github.event.inputs.enable_susfs }}" == "true" ]; then                                                                                                                                           
-                ZIP_NAME="B-A-N-K-A-A-I-v3.0-RM6785-Kernel-SUSFS_Standalone-${TIMESTAMP}"                                                                                                                                  
-              else                                                                                                                                                                                                         
-                ZIP_NAME="B-A-N-K-A-A-I-v3.0-RM6785-Kernel-Stock-${TIMESTAMP}"                                                                                                                                             
-              fi                                                                                                                                                                                                           
-                                                                                                                                                                                                                           
-              zip -r9 "${ZIP_NAME}.zip" . -x '*.git*' > /dev/null 2>&1                                                                                                                                                     
-                                                                                                                                                                                                                           
-              echo "ZIP_NAME=${ZIP_NAME}"     >> $GITHUB_ENV                                                                                                                                                               
-              echo "ANYKERNEL_DIR=$(pwd)"     >> $GITHUB_ENV                                                                                                                                                               
-                                                                                                                                                                                                                           
-          # ── 14. Upload artifact (GH backup) ───────────────────────────────────────                                                                                                                                     
-          - name: Upload Kernel Artifact                                                                                                                                                                                   
-            uses: actions/upload-artifact@v4                                                                                                                                                                               
-            with:                                                                                                                                                                                                          
-              name: ${{ env.ZIP_NAME }}                                                                                                                                                                                    
-              path: |                                                                                                                                                                                                      
-                ${{ env.ANYKERNEL_DIR }}/**                                                                                                                                                                                
-                !${{ env.ANYKERNEL_DIR }}/*.zip                                                                                                                                                                            
-                !${{ env.ANYKERNEL_DIR }}/.git/**                                                                                                                                                                          
-              retention-days: 30                                                                                                                                                                                           
-                                                                                                                                                                                                                           
-          # ── 15. Send ZIP to Telegram ──────────────────────────────────────────────                                                                                                                                     
-          - name: Send Kernel ZIP to Telegram                                                                                                                                                                              
-            if: success()                                                                                                                                                                                                  
-            run: |                                                                                                                                                                                                         
-              ZIP_PATH="${ANYKERNEL_DIR}/${ZIP_NAME}.zip"                                                                                                                                                                  
-              duration_min=$(( BUILD_DURATION / 60 ))                                                                                                                                                                      
-              duration_sec=$(( BUILD_DURATION % 60 ))                                                                                                                                                                      
-              NOTE="${{ github.event.inputs.custom_note }}"                                                                                                                                                                
-                                                                                                                                                                                                                           
-              esc() { printf '%s' "$1" | sed 's/[_*[\]()~`>#+=|{}.!-]/\\&/g'; }                                                                                                                                            
-                                                                                                                                                                                                                           
-              ZIP_ESC=$(esc "${ZIP_NAME}.zip")                                                                                                                                                                             
-              VER_ESC=$(esc "${KERNEL_VERSION}")                                                                                                                                                                           
-              BRANCH_ESC=$(esc "${KERNEL_BRANCH}")                                                                                                                                                                         
-              COMMIT_ESC=$(esc "${KERNEL_COMMIT}")                                                                                                                                                                         
-              SIZE_ESC=$(esc "${IMAGE_SIZE_MB} MB")                                                                                                                                                                        
-              TIME_ESC=$(esc "${duration_min}m ${duration_sec}s")                                                                                                                                                          
-              RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"                                                                                                                
-                                                                                                                                                                                                                           
-              CAPTION_FILE=$(mktemp)                                                                                                                                                                                       
-                                                                                                                                                                                                                           
-              printf "✅ *Build Successful — salaa*\n" >> "$CAPTION_FILE"                                                                                                                                                  
-              printf "━━━━━━━━━━━━━━━━━━━━\n"           >> "$CAPTION_FILE"                                                                                                                                                 
-              printf "\`%s\`\n\n"  "${ZIP_ESC}"         >> "$CAPTION_FILE"                                                                                                                                                 
-                                                                                                                                                                                                                           
-              printf "📱 *Device*      \`Realme 7/Narzo 20 Pro/Narzo 30 4G (salaa)\`\n" >> "$CAPTION_FILE"                                                                                                                 
-              printf "🔩 *Kernel*      \`%s\`\n" "${VER_ESC}"   >> "$CAPTION_FILE"                                                                                                                                         
-              printf "🌿 *Branch*      \`%s\`\n" "${BRANCH_ESC}" >> "$CAPTION_FILE"                                                                                                                                        
-              printf "🔖 *Commit*      \`%s\`\n" "${COMMIT_ESC}" >> "$CAPTION_FILE"                                                                                                                                        
-              printf "📦 *Image size*  \`%s\`\n" "${SIZE_ESC}"   >> "$CAPTION_FILE"                                                                                                                                        
-              printf "⏱ *Build time*  \`%s\`\n"  "${TIME_ESC}"  >> "$CAPTION_FILE"                                                                                                                                         
-                                                                                                                                                                                                                           
-              printf "\n"                                         >> "$CAPTION_FILE"                                                                                                                                       
-              if [ "${{ github.event.inputs.enable_ksu }}" == "true" ]; then                                                                                                                                               
-                KSU_VARIANT_ESC=$(esc "${KSU_VARIANT}")                                                                                                                                                                    
-                KSU_BRANCH_ESC=$(esc "${KSU_BRANCH}")                                                                                                                                                                      
-                KSU_COMMIT_ESC=$(esc "${KSU_COMMIT}")                                                                                                                                                                      
-                MANAGER_URL_ESC=$(esc "${KSU_REPO}/releases/latest")                                                                                                                                                       
-                                                                                                                                                                                                                           
-                printf "🛡 *KernelSU*\n"                                               >> "$CAPTION_FILE"                                                                                                                   
-                printf "   • *Variant*  \`%s\`\n"  "${KSU_VARIANT_ESC}"               >> "$CAPTION_FILE"                                                                                                                   
-                printf "   • *Branch*   \`%s\`\n"  "${KSU_BRANCH_ESC}"                >> "$CAPTION_FILE"                                                                                                                   
-                printf "   • *Commit*   \`%s\`\n"  "${KSU_COMMIT_ESC}"                >> "$CAPTION_FILE"                                                                                                                   
-                                                                                                                                                                                                                           
-                if [ "${SUSFS_ENABLED}" == "true" ]; then                                                                                                                                                                  
-                  if [ "${SUSFS_DRIVER_MODE}" == "no_ksu_driver" ]; then                                                                                                                                                   
-                    printf "   • *SUSFS*    \`Enabled (No KSU driver)\`\n"           >> "$CAPTION_FILE"                                                                                                                    
-                  else                                                                                                                                                                                                     
-                    printf "   • *SUSFS*    \`Enabled (With KSU driver)\`\n"         >> "$CAPTION_FILE"                                                                                                                    
-                  fi                                                                                                                                                                                                       
-                else                                                                                                                                                                                                       
-                  printf "   • *SUSFS*    \`Disabled\`\n"                              >> "$CAPTION_FILE"                                                                                                                  
-                fi                                                                                                                                                                                                         
-                                                                                                                                                                                                                           
-                printf "   • *Manager*  [Download](%s)\n" "${KSU_REPO}/releases/latest" >> "$CAPTION_FILE"                                                                                                                 
-              else                                                                                                                                                                                                         
-                printf "🛡 *KernelSU*   \`Stock (No root)\`\n"                       >> "$CAPTION_FILE"                                                                                                                     
-              fi                                                                                                                                                                                                           
-                                                                                                                                                                                                                           
-              if [ -n "$NOTE" ]; then                                                                                                                                                                                      
-                NOTE_ESC=$(esc "$NOTE")                                                                                                                                                                                    
-                printf "\n📝 *Note*  %s\n" "${NOTE_ESC}" >> "$CAPTION_FILE"                                                                                                                                                
-              fi                                                                                                                                                                                                           
-                                                                                                                                                                                                                           
-              printf "\n━━━━━━━━━━━━━━━━━━━━\n"                                        >> "$CAPTION_FILE"                                                                                                                  
-              printf "[🔗 View Run](%s)\n" "${RUN_URL}"                                 >> "$CAPTION_FILE"                                                                                                                 
-                                                                                                                                                                                                                           
-              curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument" \                                                                                                                           
-                -F chat_id="${TELEGRAM_CHAT_ID}" \                                                                                                                                                                         
-                -F parse_mode="MarkdownV2" \                                                                                                                                                                               
-                -F "caption=<${CAPTION_FILE}" \                                                                                                                                                                            
-                -F "document=@${ZIP_PATH}"                                                                                                                                                                                 
-                                                                                                                                                                                                                           
-              rm -f "$CAPTION_FILE"                                                                                                                                                                                        
-                                                                                                                                                                                                                           
-          # ── 16. Failure notification ──────────────────────────────────────────────                                                                                                                                     
-          - name: Send Failure Notification to Telegram                                                                                                                                                                    
-            if: failure()                                                                                                                                                                                                  
-            run: |                                                                                                                                                                                                         
-              esc() { printf '%s' "$1" | sed 's/[_*[\]()~`>#+=|{}.!-]/\\&/g'; }                                                                                                                                            
-                                                                                                                                                                                                                           
-              RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-              NOTE="${{ github.event.inputs.custom_note }}"
-  
-              if [ "${{ github.event.inputs.enable_ksu }}" == "true" ]; then
-                VARIANT_TAG="${{ github.event.inputs.ksu_variant }}"
-                if [ "${{ github.event.inputs.enable_susfs }}" == "true" ]; then
-                  VARIANT_TAG="${VARIANT_TAG} + SUSFS"
-                fi
-              else
-                VARIANT_TAG="Stock"
-              fi
-  
-              VARIANT_ESC=$(esc "$VARIANT_TAG")
-              BRANCH_ESC=$(esc "${{ github.event.inputs.kernel_branch }}")
-              COMMIT_ESC=$(esc "${KERNEL_COMMIT:-N/A}")
-  
-              MSG_FILE=$(mktemp)
-              printf "❌ *Build Failed — salaa*\n"                    >> "$MSG_FILE"
-              printf "━━━━━━━━━━━━━━━━━━━━\n"                          >> "$MSG_FILE"
-              printf "📱 *Device* \`Realme 7/Narzo 20 Pro/Narzo 30 4G (salaa)\`\n"           >> "$MSG_FILE"
-              printf "🔧 *Variant* \`%s\`\n" "${VARIANT_ESC}"         >> "$MSG_FILE"
-              printf "🌿 *Branch* \`%s\`\n" "${BRANCH_ESC}"          >> "$MSG_FILE"
-              printf "🔖 *Commit* \`%s\`\n" "${COMMIT_ESC}"          >> "$MSG_FILE"
-  
-              if [ -n "$NOTE" ]; then
-                NOTE_ESC=$(esc "$NOTE")
-                printf "\n📝 *Note* %s\n" "${NOTE_ESC}" >> "$MSG_FILE"
-              fi
-  
-              printf "\n━━━━━━━━━━━━━━━━━━━━\n"                         >> "$MSG_FILE"
-              printf "[🔍 View Logs on GitHub](%s)\n" "${RUN_URL}"       >> "$MSG_FILE"
-  
-              if [ -f "kernel/build.log" ]; then
-                curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument" \
-                  -F chat_id="${TELEGRAM_CHAT_ID}" \
-                  -F parse_mode="MarkdownV2" \
-                  -F "caption=<${MSG_FILE}" \
-                  -F "document=@kernel/build.log"
-              else
-                curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
-                  -d chat_id="${TELEGRAM_CHAT_ID}" \
-                  -d parse_mode="MarkdownV2" \
-                  -d disable_web_page_preview=true \
-                  --data-urlencode "text@${MSG_FILE}"
-              fi
-  
-              rm -f "$MSG_FILE"          
-    
+          rm -f "$MSG_FILE"
 
-────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+      # ── 1. Checkout ──────────────────────────────────────────────────────────
+      - name: Checkout Workflow Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      # ── 2. Cache apt packages ─────────────────────────────────────────────────
+      - name: Cache apt packages
+        uses: actions/cache@v4
+        id: cache-apt
+        with:
+          path: |
+            /var/cache/apt/archives
+            /var/lib/apt/lists
+          key: apt-salaa-${{ runner.os }}-${{ hashFiles('.github/workflows/build-kernel.yml') }}
+          restore-keys: |
+            apt-salaa-${{ runner.os }}-
+
+      - name: Set up Build Environment
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            build-essential bc bison flex libssl-dev \
+            gcc clang lld libncurses5-dev git zip unzip \
+            curl wget time ccache libelf-dev libfdt-dev \
+            python3 python3-pip
+
+      # ── 3. ccache ──────────────────────────────────────────────────────────────
+      - name: Cache ccache
+        uses: actions/cache@v4
+        with:
+          path: ~/.ccache
+          key: ccache-salaa-${{ github.sha }}
+          restore-keys: |
+            ccache-salaa-
+
+      - name: Configure ccache
+        run: |
+          ccache --max-size=5G
+          ccache --set-config=compression=true
+          ccache --set-config=compression_level=1
+          echo "CCACHE_DIR=$HOME/.ccache" >> $GITHUB_ENV
+
+      # ── 4. Kernel source ───────────────────────────────────────────────────────
+      - name: Clone Kernel Source
+        run: |
+          git clone --depth=1 "$KERNEL_REPO" -b "${{ github.event.inputs.kernel_branch }}" kernel
+          cd kernel
+          echo "KERNEL_DIR=$(pwd)"         >> $GITHUB_ENV
+          echo "KERNEL_VERSION=$(make kernelversion 2>/dev/null || echo 'unknown')" >> $GITHUB_ENV
+          echo "KERNEL_BRANCH=${{ github.event.inputs.kernel_branch }}" >> $GITHUB_ENV
+          echo "KERNEL_COMMIT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      # ── 5. Clang toolchain ─────────────────────────────────────────────────────
+      - name: Cache Clang Toolchain
+        uses: actions/cache@v4
+        id: cache-clang
+        with:
+          path: clang
+          key: clang-r547379
+
+      - name: Clone Clang Toolchain
+        if: steps.cache-clang.outputs.cache-hit != 'true'
+        run: |
+          git clone --depth=1 "$CLANG_REPO" clang
+
+      # ── 6. AnyKernel3 ──────────────────────────────────────────────────────────
+      - name: Cache AnyKernel3
+        uses: actions/cache@v4
+        id: cache-anykernel
+        with:
+          path: AnyKernel
+          key: anykernel-${{ env.ANYKERNEL_BRANCH }}
+          restore-keys: |
+            anykernel-
+
+      - name: Clone AnyKernel3
+        if: steps.cache-anykernel.outputs.cache-hit != 'true'
+        run: |
+          git clone --depth=1 "$ANYKERNEL_REPO" -b "$ANYKERNEL_BRANCH" AnyKernel
+
+      # ── 7. KernelSU variants ───────────────────────────────────────────────────
+
+      # --- KernelSU-Next ---
+      # legacy-susfs -> KernelSU-Next + SUSFS (manual-hook; no CONFIG_KSU_MANUAL_HOOK needed)
+      # legacy              -> KernelSU-Next without SUSFS
+      - name: Setup KernelSU — KernelSU-Next
+        if: github.event.inputs.enable_ksu == 'true' && github.event.inputs.ksu_variant == 'KernelSU-Next'
+        working-directory: kernel
+        run: |
+          if [ "${{ github.event.inputs.enable_susfs }}" == "true" ]; then
+            curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s legacy-susfs
+            echo "SUSFS_ENABLED=true"               >> $GITHUB_ENV
+            echo "KSU_BRANCH=legacy-susfs"     >> $GITHUB_ENV
+          else
+            curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s legacy
+            echo "SUSFS_ENABLED=false"              >> $GITHUB_ENV
+            echo "KSU_BRANCH=legacy"                  >> $GITHUB_ENV
+          fi
+          echo "KSU_VARIANT=KernelSU-Next"                                     >> $GITHUB_ENV
+          echo "KSU_REPO=https://github.com/KernelSU-Next/KernelSU-Next"          >> $GITHUB_ENV
+          
+      # --- RKSU ---
+      # susfs-rksu-master -> RKSU + SUSFS (manual-hook; no CONFIG_KSU_MANUAL_HOOK needed)
+      # main              -> RKSU without SUSFS
+      - name: Setup KernelSU — RKSU
+        if: github.event.inputs.enable_ksu == 'true' && github.event.inputs.ksu_variant == 'RKSU'
+        working-directory: kernel
+        run: |
+          if [ "${{ github.event.inputs.enable_susfs }}" == "true" ]; then
+            curl -LSs "https://raw.githubusercontent.com/rsuntk/KernelSU/main/kernel/setup.sh" | bash -s susfs-rksu-master
+            echo "SUSFS_ENABLED=true"               >> $GITHUB_ENV
+            echo "KSU_BRANCH=susfs-rksu-master"     >> $GITHUB_ENV
+          else
+            curl -LSs "https://raw.githubusercontent.com/rsuntk/KernelSU/main/kernel/setup.sh" | bash -s main
+            echo "SUSFS_ENABLED=false"              >> $GITHUB_ENV
+            echo "KSU_BRANCH=main"                  >> $GITHUB_ENV
+          fi
+          echo "KSU_VARIANT=RKSU"                                     >> $GITHUB_ENV
+          echo "KSU_REPO=https://github.com/rsuntk/KernelSU"          >> $GITHUB_ENV
+
+      # --- xxKSU ---
+      # branch: master — no SUSFS support
+      - name: Setup KernelSU — xxKSU
+        if: github.event.inputs.enable_ksu == 'true' && github.event.inputs.ksu_variant == 'xxKSU'
+        working-directory: kernel
+        run: |
+          curl -LSs "https://raw.githubusercontent.com/backslashxx/KernelSU/master/kernel/setup.sh" | bash -s master
+          echo "KSU_VARIANT=xxKSU"                                            >> $GITHUB_ENV
+          echo "SUSFS_ENABLED=false"                                           >> $GITHUB_ENV
+          echo "KSU_BRANCH=master"                                             >> $GITHUB_ENV
+          echo "KSU_REPO=https://github.com/backslashxx/KernelSU"             >> $GITHUB_ENV
+          if [ "${{ github.event.inputs.enable_susfs }}" == "true" ]; then
+            echo "::warning::xxKSU does not support SUSFS — flag ignored."
+          fi
+
+      # --- SukiSU ---
+      # susfs-main -> SukiSU + SUSFS built-in (no manual SUSFS integration needed)
+      # builtin    -> SukiSU without SUSFS
+      - name: Setup KernelSU — SukiSU
+        if: github.event.inputs.enable_ksu == 'true' && github.event.inputs.ksu_variant == 'SukiSU'
+        working-directory: kernel
+        run: |
+          if [ "${{ github.event.inputs.enable_susfs }}" == "true" ]; then
+            curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s main
+            echo "SUSFS_ENABLED=true"               >> $GITHUB_ENV
+            echo "KSU_BRANCH=main"            >> $GITHUB_ENV
+          else
+            curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s builtin
+            echo "SUSFS_ENABLED=false"              >> $GITHUB_ENV
+            echo "KSU_BRANCH=builtin"               >> $GITHUB_ENV
+          fi
+          echo "KSU_VARIANT=SukiSU"                                         >> $GITHUB_ENV
+          echo "KSU_REPO=https://github.com/SukiSU-Ultra/SukiSU-Ultra"     >> $GITHUB_ENV
+
+      # --- ReSukiSU ---
+      # branch: main — SukiSU-Ultra downstream focused on Non-GKI stability
+      - name: Setup KernelSU — ReSukiSU
+        if: github.event.inputs.enable_ksu == 'true' && github.event.inputs.ksu_variant == 'ReSukiSU'
+        working-directory: kernel
+        run: |
+          curl -LSs "https://raw.githubusercontent.com/ReSukiSU/ReSukiSU/main/kernel/setup.sh" | bash -s main
+          echo "KSU_VARIANT=ReSukiSU"                                    >> $GITHUB_ENV
+          echo "KSU_BRANCH=main"                                         >> $GITHUB_ENV
+          echo "KSU_REPO=https://github.com/ReSukiSU/ReSukiSU"          >> $GITHUB_ENV
+          if [ "${{ github.event.inputs.enable_susfs }}" == "true" ]; then
+            echo "SUSFS_ENABLED=true"               >> $GITHUB_ENV
+          else
+            echo "SUSFS_ENABLED=false"              >> $GITHUB_ENV
+          fi
+
+      # ── 8. SUSFS driver mode ───────────────────────────────────────────────────
+      - name: Configure SUSFS Driver Mode
+        if: github.event.inputs.enable_susfs == 'true'
+        run: |
+          if [ "${{ github.event.inputs.susfs_mode }}" == "without_ksu" ]; then
+            echo "SUSFS_DRIVER_MODE=no_ksu_driver"   >> $GITHUB_ENV
+          else
+            echo "SUSFS_DRIVER_MODE=with_ksu_driver" >> $GITHUB_ENV
+          fi
+
+      # ── 9. Stock fallback ──────────────────────────────────────────────────────
+      - name: Set Build Variant — Stock
+        if: github.event.inputs.enable_ksu == 'false'
+        run: |
+          echo "KSU_VARIANT=Stock"      >> $GITHUB_ENV
+          echo "SUSFS_ENABLED=false"    >> $GITHUB_ENV
+          echo "SUSFS_DRIVER_MODE=none" >> $GITHUB_ENV
+
+      # ── 10. Fetch KSU commit info ──────────────────────────────────────────────
+      - name: Get KSU Commit Info
+        if: github.event.inputs.enable_ksu == 'true'
+        run: |
+          # KSU_REPO and KSU_BRANCH are set by the variant steps above
+          KSU_COMMIT=$(git ls-remote "${KSU_REPO}.git" "${KSU_BRANCH}" | cut -f1 | cut -c1-7)
+          echo "KSU_COMMIT=${KSU_COMMIT}"                        >> $GITHUB_ENV
+          echo "KSU_COMMIT_URL=${KSU_REPO}/commit/${KSU_COMMIT}" >> $GITHUB_ENV
+
+      # ── 11. Build ──────────────────────────────────────────────────────────────
+      - name: Build Kernel
+        id: build_kernel
+        working-directory: kernel
+        run: |
+          set -e
+          start_time=$(date +%s)
+
+          export PATH="${GITHUB_WORKSPACE}/clang/bin:${PATH}"
+          export KBUILD_BUILD_USER="EvilAnsh"
+          export KBUILD_BUILD_HOST="GitHub-Actions"
+
+          mkdir -p out
+          make O=out ARCH=${ARCH} ${DEFCONFIG}
+          make -j$(nproc --all) O=out \
+              ARCH=${ARCH} \
+              CC="ccache clang" \
+              LLVM=1 \
+              LLVM_IAS=1 \
+              CROSS_COMPILE=aarch64-linux-gnu- \
+              CROSS_COMPILE_ARM32=arm-linux-gnueabi- \
+              CONFIG_NO_ERROR_ON_MISMATCH=y 2>&1 | tee build.log
+
+          BUILD_DURATION=$(( $(date +%s) - start_time ))
+          echo "BUILD_DURATION=${BUILD_DURATION}" >> $GITHUB_ENV
+          ccache --show-stats
+
+      # ── 12. Verify output ──────────────────────────────────────────────────────
+      - name: Check Build Output
+        working-directory: kernel
+        run: |
+          if [ ! -f "out/arch/arm64/boot/Image.gz" ]; then
+            echo "Image.gz not found — build failed."
+            exit 1
+          fi
+          IMAGE_SIZE_MB=$(echo "scale=2; $(stat -c%s out/arch/arm64/boot/Image.gz) / 1048576" | bc)
+          echo "IMAGE_SIZE_MB=${IMAGE_SIZE_MB}" >> $GITHUB_ENV
+
+      # ── 13. Package with AnyKernel3 ───────────────────────────────────────────
+      - name: Package with AnyKernel3
+        run: |
+          # ── Clean ALL stale artifacts from cache ──────────────────────────────
+          # Remove both the old Image.gz and any previously built ZIPs so they
+          # never get bundled into the new package after a cache restore.
+          rm -f AnyKernel/Image.gz
+          rm -f AnyKernel/*.zip
+
+          cp kernel/out/arch/arm64/boot/Image.gz AnyKernel/
+
+          cd AnyKernel
+          TIMESTAMP=$(date +"%Y%m%d-%H%M")
+
+          if [ "${{ github.event.inputs.enable_ksu }}" == "true" ]; then
+            if [ "${SUSFS_ENABLED}" == "true" ]; then
+              if [ "${SUSFS_DRIVER_MODE}" == "no_ksu_driver" ]; then
+                ZIP_NAME="Stormbreaker-salaa-${KSU_VARIANT}-SUSFS_NoDriver-${TIMESTAMP}"
+              else
+                ZIP_NAME="Stormbreaker-salaa-${KSU_VARIANT}-SUSFS-${TIMESTAMP}"
+              fi
+            else
+              ZIP_NAME="Stormbreaker-salaa-${KSU_VARIANT}-${TIMESTAMP}"
+            fi
+          elif [ "${{ github.event.inputs.enable_susfs }}" == "true" ]; then
+            # Standalone SUSFS without any KSU driver
+            ZIP_NAME="Stormbreaker-salaa-SUSFS_Standalone-${TIMESTAMP}"
+          else
+            ZIP_NAME="Stormbreaker-salaa-Stock-${TIMESTAMP}"
+          fi
+
+          zip -r9 "${ZIP_NAME}.zip" . -x '*.git*' > /dev/null 2>&1
+
+          echo "ZIP_NAME=${ZIP_NAME}"     >> $GITHUB_ENV
+          echo "ANYKERNEL_DIR=$(pwd)"     >> $GITHUB_ENV
+
+      # ── 14. Upload artifact (GH backup) ───────────────────────────────────────
+      - name: Upload Kernel Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ZIP_NAME }}
+          path: ${{ env.ANYKERNEL_DIR }}/${{ env.ZIP_NAME }}.zip
+          retention-days: 30
+
+      # ── 15. Send ZIP to Telegram ──────────────────────────────────────────────
+      # sendDocument uses multipart/form-data. Caption uses MarkdownV2 via a
+      # temp file piped with -F "caption=<file". All special chars are escaped.
+      - name: Send Kernel ZIP to Telegram
+        if: success()
+        run: |
+          ZIP_PATH="${ANYKERNEL_DIR}/${ZIP_NAME}.zip"
+          duration_min=$(( BUILD_DURATION / 60 ))
+          duration_sec=$(( BUILD_DURATION % 60 ))
+          NOTE="${{ github.event.inputs.custom_note }}"
+
+          # Helper: escape MarkdownV2 special characters
+          esc() { printf '%s' "$1" | sed 's/[_*[\]()~`>#+=|{}.!-]/\\&/g'; }
+
+          ZIP_ESC=$(esc "${ZIP_NAME}.zip")
+          VER_ESC=$(esc "${KERNEL_VERSION}")
+          BRANCH_ESC=$(esc "${KERNEL_BRANCH}")
+          COMMIT_ESC=$(esc "${KERNEL_COMMIT}")
+          SIZE_ESC=$(esc "${IMAGE_SIZE_MB} MB")
+          TIME_ESC=$(esc "${duration_min}m ${duration_sec}s")
+          RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+          CAPTION_FILE=$(mktemp)
+
+          # ── Header ────────────────────────────────────────────────────────────
+          printf "✅ *Build Successful — salaa*\n" >> "$CAPTION_FILE"
+          printf "━━━━━━━━━━━━━━━━━━━━\n"           >> "$CAPTION_FILE"
+          printf "\`%s\`\n\n"  "${ZIP_ESC}"         >> "$CAPTION_FILE"
+
+          # ── Kernel info ───────────────────────────────────────────────────────
+          printf "📱 *Device*      \`Realme 7/Narzo 20 Pro/Narzo 30 4G \(salaa\)\`\n" >> "$CAPTION_FILE"
+          printf "🔩 *Kernel*      \`%s\`\n" "${VER_ESC}"   >> "$CAPTION_FILE"
+          printf "🌿 *Branch*      \`%s\`\n" "${BRANCH_ESC}" >> "$CAPTION_FILE"
+          printf "🔖 *Commit*      \`%s\`\n" "${COMMIT_ESC}" >> "$CAPTION_FILE"
+          printf "📦 *Image size*  \`%s\`\n" "${SIZE_ESC}"   >> "$CAPTION_FILE"
+          printf "⏱ *Build time*  \`%s\`\n"  "${TIME_ESC}"  >> "$CAPTION_FILE"
+
+          # ── KernelSU block ────────────────────────────────────────────────────
+          printf "\n"                                         >> "$CAPTION_FILE"
+          if [ "${{ github.event.inputs.enable_ksu }}" == "true" ]; then
+            KSU_VARIANT_ESC=$(esc "${KSU_VARIANT}")
+            KSU_BRANCH_ESC=$(esc "${KSU_BRANCH}")
+            KSU_COMMIT_ESC=$(esc "${KSU_COMMIT}")
+            
+            # Conditionally route the manager download link for ReSukiSU
+            if [ "${KSU_VARIANT}" == "ReSukiSU" ]; then
+              MANAGER_DL="https://t.me/ReSukiSU/4"
+            else
+              MANAGER_DL="${KSU_REPO}/releases/latest"
+            fi
+
+            printf "🛡 *KernelSU*\n"                                               >> "$CAPTION_FILE"
+            printf "   • *Variant*  \`%s\`\n"  "${KSU_VARIANT_ESC}"               >> "$CAPTION_FILE"
+            printf "   • *Branch*   \`%s\`\n"  "${KSU_BRANCH_ESC}"                >> "$CAPTION_FILE"
+            printf "   • *Commit*   \`%s\`\n"  "${KSU_COMMIT_ESC}"                >> "$CAPTION_FILE"
+
+            if [ "${SUSFS_ENABLED}" == "true" ]; then
+              if [ "${SUSFS_DRIVER_MODE}" == "no_ksu_driver" ]; then
+                printf "   • *SUSFS*    \`Enabled \(No KSU driver\)\`\n"           >> "$CAPTION_FILE"
+              else
+                printf "   • *SUSFS*    \`Enabled \(With KSU driver\)\`\n"         >> "$CAPTION_FILE"
+              fi
+            else
+              printf "   • *SUSFS*    \`Disabled\`\n"                              >> "$CAPTION_FILE"
+            fi
+
+            printf "   • *Manager*  [Download](%s)\n" "${MANAGER_DL}" >> "$CAPTION_FILE"
+          else
+            printf "🛡 *KernelSU*   \`Stock \(No root\)\`\n"                       >> "$CAPTION_FILE"
+          fi
+
+          # ── Optional note ─────────────────────────────────────────────────────
+          if [ -n "$NOTE" ]; then
+            NOTE_ESC=$(esc "$NOTE")
+            printf "\n📝 *Note*  %s\n" "${NOTE_ESC}" >> "$CAPTION_FILE"
+          fi
+
+          # ── Footer ────────────────────────────────────────────────────────────
+          printf "\n━━━━━━━━━━━━━━━━━━━━\n"                                        >> "$CAPTION_FILE"
+          printf "[🔗 View Run](%s)\n" "${RUN_URL}"                                 >> "$CAPTION_FILE"
+
+          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument" \
+            -F chat_id="${TELEGRAM_CHAT_ID}" \
+            -F parse_mode="MarkdownV2" \
+            -F "caption=<${CAPTION_FILE}" \
+            -F "document=@${ZIP_PATH}"
+
+          rm -f "$CAPTION_FILE"
+
+      # ── 16. Failure notification ──────────────────────────────────────────────
+      - name: Send Failure Notification to Telegram
+        if: failure()
+        run: |
+          esc() { printf '%s' "$1" | sed 's/[_*[\]()~`>#+=|{}.!-]/\\&/g'; }
+
+          RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          NOTE="${{ github.event.inputs.custom_note }}"
+
+          if [ "${{ github.event.inputs.enable_ksu }}" == "true" ]; then
+            VARIANT_TAG="${{ github.event.inputs.ksu_variant }}"
+            if [ "${{ github.event.inputs.enable_susfs }}" == "true" ]; then
+              VARIANT_TAG="${VARIANT_TAG} + SUSFS"
+            fi
+          else
+            VARIANT_TAG="Stock"
+          fi
+
+          VARIANT_ESC=$(esc "$VARIANT_TAG")
+          BRANCH_ESC=$(esc "${{ github.event.inputs.kernel_branch }}")
+          COMMIT_ESC=$(esc "${KERNEL_COMMIT:-N/A}")
+
+          MSG_FILE=$(mktemp)
+          printf "❌ *Build Failed — salaa*\n"                    >> "$MSG_FILE"
+          printf "━━━━━━━━━━━━━━━━━━━━\n"                          >> "$MSG_FILE"
+          printf "📱 *Device* \`Realme 7/Narzo 20 Pro/Narzo 30 4G \(salaa\)\`\n"           >> "$MSG_FILE"
+          printf "🔧 *Variant* \`%s\`\n" "${VARIANT_ESC}"         >> "$MSG_FILE"
+          printf "🌿 *Branch* \`%s\`\n" "${BRANCH_ESC}"          >> "$MSG_FILE"
+          printf "🔖 *Commit* \`%s\`\n" "${COMMIT_ESC}"          >> "$MSG_FILE"
+
+          if [ -n "$NOTE" ]; then
+            NOTE_ESC=$(esc "$NOTE")
+            printf "\n📝 *Note* %s\n" "${NOTE_ESC}" >> "$MSG_FILE"
+          fi
+
+          printf "\n━━━━━━━━━━━━━━━━━━━━\n"                         >> "$MSG_FILE"
+          printf "[🔍 View Logs on GitHub](%s)\n" "${RUN_URL}"       >> "$MSG_FILE"
+
+          # Standard file upload logic
+          if [ -f "kernel/build.log" ]; then
+            curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument" \
+              -F chat_id="${TELEGRAM_CHAT_ID}" \
+              -F parse_mode="MarkdownV2" \
+              -F "caption=<${MSG_FILE}" \
+              -F "document=@kernel/build.log"
+          else
+            curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+              -d chat_id="${TELEGRAM_CHAT_ID}" \
+              -d parse_mode="MarkdownV2" \
+              -d disable_web_page_preview=true \
+              --data-urlencode "text@${MSG_FILE}"
+          fi
+
+          rm -f "$MSG_FILE"
